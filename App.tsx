@@ -1,99 +1,75 @@
-import React from 'react'
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native'
+import React, { useState } from 'react'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { StyleSheet, Text, ImageBackground } from 'react-native'
+import { Button } from 'react-native-elements'
+import ProgressCircle from 'react-native-progress-circle'
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen'
-
-interface Props {
-  children: React.ReactNode
-  title: string
-}
-
-const Section = ({ children, title }: Props): JSX.Element => {
-  const isDarkMode = useColorScheme() === 'dark'
+const App = () => {
+  const [ascents, setAscents] = useState(0)
 
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}
-      >
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}
-      >
-        {children}
-      </Text>
-    </View>
-  )
-}
-
-const App: () => JSX.Element = () => {
-  const isDarkMode = useColorScheme() === 'dark'
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  }
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}
+    <SafeAreaProvider>
+      <ImageBackground source={require('./images/mountain-1.png')} style={styles.container}>
+        <ProgressCircle
+          percent={ascents * 10}
+          radius={80}
+          borderWidth={8}
+          color={'#d4af37'}
+          shadowColor="#999"
+          bgColor={'white'}
         >
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this screen and then come back to see your
-            edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">Read the docs to discover what to do next:</Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <Text style={styles.ascents}>{ascents}</Text>
+        </ProgressCircle>
+        <Button
+          raised
+          buttonStyle={styles.button}
+          titleStyle={styles.buttonLabel}
+          containerStyle={styles.buttonContainer}
+          title={'COMPLETED ASCENT'}
+          onPress={() => setAscents(ascents + 1)}
+        />
+        <Button type={'clear'} titleStyle={styles.resetButton} title={'Reset'} onPress={() => setAscents(0)} />
+      </ImageBackground>
+    </SafeAreaProvider>
   )
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  ascents: {
+    fontWeight: '900',
+    color: 'black',
+    fontSize: 72,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  button: {
+    backgroundColor: 'white',
+    borderRadius: 28,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
   },
-  highlight: {
-    fontWeight: '700',
+  buttonContainer: {
+    marginTop: 16,
+    borderRadius: 28,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
+  },
+  buttonLabel: {
+    color: 'black',
+    fontWeight: '900',
+    fontSize: 12,
+  },
+  resetButton: {
+    color: 'white',
   },
 })
 
